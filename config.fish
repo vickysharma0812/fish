@@ -17,7 +17,7 @@ function fish_greeting
     printf "      https://www.easifem.com \n"
 end
 
-fish_config theme choose "Rosé Pine Dawn"
+fish_config theme choose "Rosé Pine"
 
 # Path to EASIFEM config
 set -q XDG_DATA_HOME
@@ -98,13 +98,21 @@ end
 # --color=selected-bg:#BCC0CC \
 # --color=border:#CCD0DA,label:#4C4F69"
 
-## Rose-pine dawn theme
+# ## Rose-pine dawn theme
+# set -Ux FZF_DEFAULT_OPTS "
+# 	--color=fg:#797593,bg:#faf4ed,hl:#d7827e
+# 	--color=fg+:#575279,bg+:#f2e9e1,hl+:#d7827e
+# 	--color=border:#dfdad9,header:#286983,gutter:#faf4ed
+# 	--color=spinner:#ea9d34,info:#56949f
+# 	--color=pointer:#907aa9,marker:#b4637a,prompt:#797593"
+
+## Rose pine theme
 set -Ux FZF_DEFAULT_OPTS "
-	--color=fg:#797593,bg:#faf4ed,hl:#d7827e
-	--color=fg+:#575279,bg+:#f2e9e1,hl+:#d7827e
-	--color=border:#dfdad9,header:#286983,gutter:#faf4ed
-	--color=spinner:#ea9d34,info:#56949f
-	--color=pointer:#907aa9,marker:#b4637a,prompt:#797593"
+	--color=fg:#908caa,bg:#191724,hl:#ebbcba
+	--color=fg+:#e0def4,bg+:#26233a,hl+:#ebbcba
+	--color=border:#403d52,header:#31748f,gutter:#191724
+	--color=spinner:#f6c177,info:#9ccfd8
+	--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
 
 set -gx config $HOME/.config/
 abbr -a cdc cd $config
