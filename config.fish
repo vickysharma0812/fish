@@ -17,15 +17,24 @@ function fish_greeting
     printf "      https://www.easifem.com \n"
 end
 
-fish_config theme choose "Rosé Pine"
+fish_config theme choose "Catppuccin Mocha"
+# name: 'Catppuccin Mocha'
+
+set -q XDG_CONFIG_HOME
+or set -gx XDG_CONFIG_HOME $HOME/.config
 
 # Path to EASIFEM config
 set -q XDG_DATA_HOME
-and set -gx EASIFEM_CONFIG_PATH "$XDG_DATA_HOME/easifem"
-or set -gx EASIFEM_CONFIG_PATH "$HOME/.config/easifem"
+and set -gx EASIFEM_CONFIG_PATH $XDG_DATA_HOME/easifem
+or set -gx EASIFEM_CONFIG_PATH $HOME/.config/easifem
 
-## Paths
-#
+set -gx LDFLAGS -L/opt/homebrew/opt/libomp/lib
+set -gx CPPFLAGS -I/opt/homebrew/opt/libomp/include
+
+# Neovide config
+set -gx NEOVIDE_CONFIG "$HOME/.config/neovide/config.toml"
+alias neovide="open -a Neovide"
+
 # installing npm packages locally
 set -gx NPM_CONFIG_PREFIX "$HOME/.npm-packages"
 set -gx NPM_PACKAGES "$HOME/.npm-packages"
@@ -40,93 +49,49 @@ if not string match -q -- $PNPM_HOME $PATH
     set -gx PATH "$PNPM_HOME" $PATH
 end
 
-# starship prompt
-# if type -q starship
-#     starship init fish | source
-# end
-
 ## rbenv
 if type -q rbenv
     status --is-interactive; and rbenv init - fish | source
 end
-
-# fisher_path
-# set -g -x fisher_path $__fish_config_dir
 
 # easifem related
 if test -f ~/.config/easifem/easifemvar.fish
     source ~/.config/easifem/easifemvar.fish
 end
 
-if test -f ~/.config/easifem/scripts/easifem_functions.fish
-    source ~/.config/easifem/scripts/easifem_functions.fish
+if test -f $EASIFEM_CONFIG_PATH/scripts/easifem_functions.fish
+    source $EASIFEM_CONFIG_PATH/scripts/easifem_functions.fish
 end
 
 if type -q nvim
     set -gx EDITOR $(which nvim)
 end
 
-# set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS \
-#   --highlight-line \
-#   --info=inline-right \
-#   --ansi \
-#   --layout=reverse \
-#   --border=none
-#   --color=bg+:#283457 \
-#   --color=bg:#16161e \
-#   --color=border:#27a1b9 \
-#   --color=fg:#c0caf5 \
-#   --color=gutter:#16161e \
-#   --color=header:#ff9e64 \
-#   --color=hl+:#2ac3de \
-#   --color=hl:#2ac3de \
-#   --color=info:#545c7e \
-#   --color=marker:#ff007c \
-#   --color=pointer:#ff007c \
-#   --color=prompt:#2ac3de \
-#   --color=query:#c0caf5:regular \
-#   --color=scrollbar:#27a1b9 \
-#   --color=separator:#ff9e64 \
-#   --color=spinner:#ff007c \
-# "
+if type -q nvim
+    set -gx EDITOR $(which nvim)
+end
 
-## Catppuccin theme
-# set -Ux FZF_DEFAULT_OPTS "\
-# --color=bg+:#CCD0DA,bg:#EFF1F5,spinner:#DC8A78,hl:#D20F39 \
-# --color=fg:#4C4F69,header:#D20F39,info:#8839EF,pointer:#DC8A78 \
-# --color=marker:#7287FD,fg+:#4C4F69,prompt:#8839EF,hl+:#D20F39 \
-# --color=selected-bg:#BCC0CC \
-# --color=border:#CCD0DA,label:#4C4F69"
+# Cattpuccin Mocha theme
+set -Ux FZF_DEFAULT_OPTS "\
+--color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
+--color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
+--color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
+--color=selected-bg:#45475A \
+--color=border:#313244,label:#CDD6F4"
 
-# ## Rose-pine dawn theme
-# set -Ux FZF_DEFAULT_OPTS "
-# 	--color=fg:#797593,bg:#faf4ed,hl:#d7827e
-# 	--color=fg+:#575279,bg+:#f2e9e1,hl+:#d7827e
-# 	--color=border:#dfdad9,header:#286983,gutter:#faf4ed
-# 	--color=spinner:#ea9d34,info:#56949f
-# 	--color=pointer:#907aa9,marker:#b4637a,prompt:#797593"
-
-## Rose pine theme
-set -Ux FZF_DEFAULT_OPTS "
-	--color=fg:#908caa,bg:#191724,hl:#ebbcba
-	--color=fg+:#e0def4,bg+:#26233a,hl+:#ebbcba
-	--color=border:#403d52,header:#31748f,gutter:#191724
-	--color=spinner:#f6c177,info:#9ccfd8
-	--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
-
-set -gx config $HOME/.config/
+set -gx config $HOME/.config
 abbr -a cdc cd $config
-set -gx i3 $config/i3/
+set -gx i3 $config/i3
 
 set -gx down $HOME/Downloads/
 
-set -gx tmux $HOME/.config/tmux/
+set -gx tmux $HOME/.config/tmux
 set -gx tmuxrc $HOME/.config/tmux/tmux.conf
 
 set -gx fish $config/fish
 set -gx fishrc $fish/config.fish
 
-set -gx alacritty $config/alacritty/
+set -gx alacritty $config/alacritty
 set -gx alarc $alacritt/alacritty.toml
 set -gx kitty $config/kitty
 
@@ -142,26 +107,32 @@ set -gx wezterm $config/wezterm
 set -gx dropbox $HOME/Dropbox
 set -gx dot $dropbox/dotfiles
 set -gx VIMTEX_OUTPUT_DIRECTORY build
+set -gx tide $HOME/qmk_firmware/keyboards/epomaker/tide65/keymaps/easifem/
 
 set -gx easifem $dropbox/easifem
 set -gx easiconfig $config/easifem
 set -gx base $easifem/base
 set -gx classes $easifem/classes
-set -gx materials $easifem/materials/
+set -gx materials $easifem/materials
 set -gx tests $easifem/tests
-set -gx kernels $easifem/kernels/
-set -gx elasticity $easifem/elasticity/
-set -gx acoustic $easifem/acoustic/
-set -gx website $HOME/Documents/vickysharma0812.github.io/
-set -gx easifemDocs $HOME/Documents/easifem.github.io/
-set -gx docs $easifemDocs/docs/docs-api
+set -gx kernels $easifem/kernels
+set -gx elasticity $easifem/elasticity
+set -gx acoustic $easifem/acoustic
 set -gx apps $easifem/apps
 set -gx EASIFEM_TEST_DIR $tests
-set -gx lectures $HOME/Documents/quarto-lectures/
-set -gx lyxdocs $HOME/Documents/lyx/
-set -gx papers $HOME/Documents/papers/
-set -gx books $HOME/Documents/books/
-set -gx onedrive ~/OneDrive
+set -gx easifemDocs $HOME/Documents/easifem.github.io
+set -gx docs $easifemDocs/docs/docs-api
+
+set -gx website $HOME/Documents/vickysharma0812.github.io
+set -gx onedrive ~/Documents/
+set -gx ongoing $HOME/Documents/Publications/Ongoing
+set -gx knowledge $onedrive/Knowledge/
+set -gx fem $knowledge/FEM
+set -gx papers $knowledge/Papers
+set -gx books $knowledge/Books
+set -gx lyx $knowledge/Lyx
+set -gx lectures $knowledge/Lectures
+set -gx notes $lectures/vickysharma0812.github.io/markdown-notes/
 
 abbr -a edc easifem dev classes
 abbr -a edb easifem dev base
@@ -171,10 +142,9 @@ abbr -a cded cd $docs
 abbr -a cdeb cd $base
 abbr -a cdec cd $classes
 
-## alias and functions
-#
-
+# alias and functions
 alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
+alias inkscape='open -a /Applications/Inkscape.app'
 
 function v
     nvim $argv
@@ -203,6 +173,10 @@ alias vlec="cd $lectures && nvim ./README.md"
 # To always Warpify the subshell for this command, add the following command to the end of your config.fish:
 # printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish" }}\x9c'
 
+if type -q /opt/homebrew/bin/brew
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+end
+
 if type -q brew
     set PATH $PATH /opt/homebrew/bin "$HOME/Library/Python/3.11/bin"
 end
@@ -219,7 +193,7 @@ set PATH $PATH "$HOME/.local/bin"
 set GOPATH $HOME/go
 set PATH $PATH "$GOPATH/bin"
 
-set -gx TERM xterm-256color
+# set -gx TERM xterm-256color
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 
@@ -246,10 +220,10 @@ end
 # https://yazi-rs.github.io/docs/quick-start
 # We suggest using this ya shell wrapper that provides the ability to
 # change the current working directory when exiting Yazi.
-function yy
+function y
     set tmp (mktemp -t "yazi-cwd.XXXXXX")
-    yazi $argv --cwd-file="$tmp"
-    if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+    command yazi $argv --cwd-file="$tmp"
+    if read -z cwd <"$tmp"; and [ "$cwd" != "$PWD" ]; and test -d "$cwd"
         builtin cd -- "$cwd"
     end
     rm -f -- "$tmp"
@@ -293,6 +267,7 @@ end
 
 if type -q eza
     alias exa="eza --long --header --icons --git --sort=size"
+    alias ls="eza --long --header --icons --git --sort=size"
 end
 
 if type -q zoxide
@@ -341,11 +316,16 @@ end
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
 set -gx PATH $HOME/.cabal/bin $PATH /Users/easifem/.ghcup/bin # ghcup-env
 
-# pnpm
-set -gx PNPM_HOME "/home/easifem/.local/share/pnpm"
-if not string match -q -- $PNPM_HOME $PATH
-    set -gx PATH "$PNPM_HOME" $PATH
-end
-# pnpm end
-
 set onedrive ~/OneDrive
+
+## helix related 
+set -gx HELIX_RUNTIME $config/helix/runtime
+# set -gx HELIX_DISABLE_AUTO_GRAMMAR_BUILD 1
+set -gx SNIPPETS_PATH $easifem/snippets
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :
+
+# Added by Antigravity
+fish_add_path /Users/easifem/.antigravity/antigravity/bin
