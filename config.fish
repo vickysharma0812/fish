@@ -31,10 +31,6 @@ or set -gx EASIFEM_CONFIG_PATH $HOME/.config/easifem
 set -gx LDFLAGS -L/opt/homebrew/opt/libomp/lib
 set -gx CPPFLAGS -I/opt/homebrew/opt/libomp/include
 
-# Neovide config
-set -gx NEOVIDE_CONFIG "$HOME/.config/neovide/config.toml"
-alias neovide="open -a Neovide"
-
 # installing npm packages locally
 set -gx NPM_CONFIG_PREFIX "$HOME/.npm-packages"
 set -gx NPM_PACKAGES "$HOME/.npm-packages"
@@ -63,12 +59,8 @@ if test -f $EASIFEM_CONFIG_PATH/scripts/easifem_functions.fish
     source $EASIFEM_CONFIG_PATH/scripts/easifem_functions.fish
 end
 
-if type -q nvim
-    set -gx EDITOR $(which nvim)
-end
-
-if type -q nvim
-    set -gx EDITOR $(which nvim)
+if type -q hx
+    set -gx EDITOR $(which hx)
 end
 
 # Cattpuccin Mocha theme
@@ -98,7 +90,6 @@ set -gx kitty $config/kitty
 # set -gx nvim $config/nvim
 set -gx nvim $config/nvim
 abbr -a cdv cd $nvim
-abbr -a cdd cd $dropbox
 
 set -gx yazi $config/yazi
 set -gx zellij $config/zellij
@@ -109,7 +100,8 @@ set -gx dot $dropbox/dotfiles
 set -gx VIMTEX_OUTPUT_DIRECTORY build
 set -gx tide $HOME/qmk_firmware/keyboards/epomaker/tide65/keymaps/easifem/
 
-set -gx easifem $dropbox/easifem
+set -gx onedrive /Users/easifem/Library/CloudStorage/OneDrive-KyotoUniversity
+set -gx easifem $onedrive/easifem
 set -gx easiconfig $config/easifem
 set -gx base $easifem/base
 set -gx classes $easifem/classes
@@ -119,9 +111,12 @@ set -gx kernels $easifem/kernels
 set -gx elasticity $easifem/elasticity
 set -gx acoustic $easifem/acoustic
 set -gx apps $easifem/apps
+set -gx easifemManual $easifem/easifemManual
 set -gx EASIFEM_TEST_DIR $tests
-set -gx easifemDocs $HOME/Documents/easifem.github.io
-set -gx docs $easifemDocs/docs/docs-api
+set -gx easifemDocs $HOME/Documents/Playground/hugo/easifem.github.io
+set -gx docs $easifemDocs/content/docs-api
+
+set -gx knowledgeBook $HOME/Documents/Publications/MyBooks/KnowledgeBook
 
 set -gx website $HOME/Documents/vickysharma0812.github.io
 set -gx onedrive ~/Documents/
@@ -132,12 +127,17 @@ set -gx papers $knowledge/Papers
 set -gx books $knowledge/Books
 set -gx lyx $knowledge/Lyx
 set -gx lectures $knowledge/Lectures
+set -gx vicky $lectures/vickysharma0812.github.io/
 set -gx notes $lectures/vickysharma0812.github.io/markdown-notes/
+set -gx rdp ~/Documents/Assistant-Professor-Kyoto/2026-Semester-1/RDP
+set -gx sfe ~/Documents/Assistant-Professor-Kyoto/2026-Semester-1/SFE
 
-abbr -a edc easifem dev classes
 abbr -a edb easifem dev base
+abbr -a edc easifem dev classes
+abbr -a eds easifem dev seepage
 abbr -a eib easifem install base --no-download
 abbr -a eic easifem install classes --no-download
+abbr -a eis easifem install seepage --no-download
 abbr -a cded cd $docs
 abbr -a cdeb cd $base
 abbr -a cdec cd $classes
@@ -145,6 +145,8 @@ abbr -a cdec cd $classes
 # alias and functions
 alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
 alias inkscape='open -a /Applications/Inkscape.app'
+alias veusz='open -a Veusz'
+alias paraview='open -a ParaView'
 
 function v
     nvim $argv
@@ -194,8 +196,7 @@ set GOPATH $HOME/go
 set PATH $PATH "$GOPATH/bin"
 
 # set -gx TERM xterm-256color
-set -gx EDITOR nvim
-set -gx VISUAL nvim
+set -gx VISUAL zed
 
 # gmsh related
 #
@@ -318,10 +319,10 @@ set -gx PATH $HOME/.cabal/bin $PATH /Users/easifem/.ghcup/bin # ghcup-env
 
 set onedrive ~/OneDrive
 
-## helix related 
+## helix related
 set -gx HELIX_RUNTIME $config/helix/runtime
 # set -gx HELIX_DISABLE_AUTO_GRAMMAR_BUILD 1
-set -gx SNIPPETS_PATH $easifem/snippets
+set -gx SNIPPETS_PATH $nvim/snippets
 
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
@@ -329,3 +330,14 @@ source ~/.orbstack/shell/init2.fish 2>/dev/null || :
 
 # Added by Antigravity
 fish_add_path /Users/easifem/.antigravity/antigravity/bin
+
+# Added by television cli
+# Fish
+tv init fish | source
+
+# Currently gcc-16 does not compile easifem on macos, therefore, we cannot use HDF2.2
+# So I have installed HDF52.1 and kept in install folder of easifem
+# set -gx LD_LIBRARY_PATH /Users/easifem/.easifem/easifem/install/hdf5/lib $LD_LIBRARY_PATH
+
+# Added by Antigravity IDE
+fish_add_path /Users/easifem/.antigravity-ide/antigravity-ide/bin
